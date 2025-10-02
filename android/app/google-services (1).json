@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "138056387893",
+    "project_id": "miniwheelscars",
+    "storage_bucket": "miniwheelscars.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:138056387893:android:bb100bfd59ec012834107c",
+        "android_client_info": {
+          "package_name": "com.example.mini_wheelz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "138056387893-o4a32djpemv814o0ec1lkssjqdctsq9u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAriKqQtgB5RdpIpPtHeFbUzw4hSENhIc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "138056387893-o4a32djpemv814o0ec1lkssjqdctsq9u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "138056387893-jpouk3cgjbd83n70g5clalciauqe81q0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.miniWheelz"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:138056387893:android:8f76ed242657445134107c",
+        "android_client_info": {
+          "package_name": "com.example.mini_wheelz_user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "138056387893-ap625s2cbneeihb6gjmdngobncrg4png.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mini_wheelz_user",
+            "certificate_hash": "4a879c273cf2b99b5b469276bc6e2a860fda8d21"
+          }
+        },
+        {
+          "client_id": "138056387893-o4a32djpemv814o0ec1lkssjqdctsq9u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAriKqQtgB5RdpIpPtHeFbUzw4hSENhIc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "138056387893-o4a32djpemv814o0ec1lkssjqdctsq9u.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "138056387893-jpouk3cgjbd83n70g5clalciauqe81q0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.miniWheelz"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
