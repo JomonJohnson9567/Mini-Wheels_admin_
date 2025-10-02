@@ -1,10 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_wheelz/bloc/product_detail_cubit.dart';
 import 'package:mini_wheelz/core/colors.dart';
 import 'package:mini_wheelz/screens/edit_product.dart';
 import 'package:mini_wheelz/widgets/cards_widgets.dart';
+import 'package:mini_wheelz/widgets/confirm_delete_product.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final Map<String, dynamic> productData;
@@ -23,153 +23,190 @@ class ProductDetailPage extends StatelessWidget {
         BlocProvider(create: (_) => ImageCarouselCubit()),
       ],
       child: Scaffold(
-        backgroundColor: whiteColor,
+        backgroundColor: const Color(0xFFF3F6FB),
+        extendBody: true,
         appBar: AppBar(
-          title: Text(productData['name']),
-          backgroundColor: primaryColor,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: _circleButton(
+            context,
+            icon: Icons.arrow_back_ios_new,
+            onTap: () => Navigator.pop(context),
+          ),
           actions: [
-            BlocBuilder<ProductDetailCubit, ProductDetailState>(
-              builder: (context, state) {
-                if (state.product == null) return const SizedBox();
-                final updatedData = state.product!;
-                return Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit),
-                      onPressed: () async {
-                        final updated = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => EditProductScreen(
-                              productId: productId,
-                              initialData: updatedData,
-                            ),
-                          ),
-                        );
-                        if (updated == true) {
-                          context.read<ProductDetailCubit>().fetchProduct(
-                            productId,
-                          );
-                        }
-                      },
+            _circleButton(
+              context,
+              icon: Icons.edit_outlined,
+              onTap: () async {
+                final updated = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => EditProductScreen(
+                      productId: productId,
+                      initialData: productData,
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () => _confirmDelete(context, productId),
-                    ),
-                  ],
+                  ),
                 );
+                if (updated == true) {
+                  context.read<ProductDetailCubit>().fetchProduct(productId);
+                }
               },
             ),
+            const SizedBox(width: 8),
+            _circleButton(
+              context,
+              icon: Icons.delete_outline,
+              color: Colors.redAccent,
+              onTap: () => confirmDelete(context, productId),
+            ),
+            const SizedBox(width: 12),
           ],
         ),
         body: BlocBuilder<ProductDetailCubit, ProductDetailState>(
           builder: (context, state) {
             if (state.loading) {
-              return const Center(
-                child: CircularProgressIndicator(color: primaryColor),
-              );
+              return const Center(child: CircularProgressIndicator());
             }
-
             if (state.error != null) {
               return Center(
-                child: Text(state.error!, style: TextStyle(color: redColor)),
+                child: Text(
+                  state.error!,
+                  style: const TextStyle(color: Colors.red),
+                ),
               );
             }
 
             final data = state.product!;
             final List<String> images = List<String>.from(data['images'] ?? []);
 
-            return LayoutBuilder(
-              builder: (context, constraints) {
-                final isWide = constraints.maxWidth > 600;
-                return ListView(
-                  padding: const EdgeInsets.all(16),
-                  children: [
-                    if (images.isNotEmpty)
-                      ImageCarousel(images: images, height: isWide ? 300 : 220),
-                    const SizedBox(height: 16),
+            return Stack(
+              children: [
+                SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 🔥 Hero Carousel
+                      if (images.isNotEmpty)
+                        Hero(
+                          tag: "product_$productId",
+                          child: ImageCarousel(images: images, height: 380),
+                        )
+                      else
+                        Container(
+                          height: 380,
+                          color: Colors.grey.shade200,
+                          child: const Center(
+                            child: Icon(Icons.image, size: 80),
+                          ),
+                        ),
 
-                    // Name
-                    DetailCard(
-                      color: const Color.fromARGB(255, 233, 183, 84),
-                      child: Text(
-                        data['name'] ?? 'No Name',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      // 🔥 Glassmorphic Content
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(28),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 30,
+                              offset: Offset(0, -8),
+                              color: Colors.black12,
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Product Title
+                            Text(
+                              data['name'] ?? "No Name",
+                              style: const TextStyle(
+                                fontSize: 26,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: -0.5,
+                                color: Color(0xFF222222),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+
+                            // Category chip
+                            Chip(
+                              avatar: const Icon(
+                                Icons.category_outlined,
+                                size: 18,
+                                color: Colors.white,
+                              ),
+                              label: Text(
+                                data['category'] ?? "Unknown",
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              backgroundColor: Colors.indigo.shade400,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+
+                            const SizedBox(height: 24),
+
+                            // Price & Stock Cards
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: _infoCard(
+                                    title: "Price",
+                                    value:
+                                        "₹${(data['price'] ?? 0).toStringAsFixed(2)}",
+                                    icon: Icons.currency_rupee,
+                                    color1: const Color(0xFF6A11CB),
+                                    color2: const Color(0xFF2575FC),
+                                  ),
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: _infoCard(
+                                    title: "In Stock",
+                                    value:
+                                        " ${data['quantity'] ?? 0} |${data['unit'] ?? ""}",
+                                    icon: Icons.inventory_2_outlined,
+                                    color1: const Color(0xFFFF6A00),
+                                    color2: const Color(0xFFFFC107),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 24),
+
+                            // Description
+                            Text(
+                              "Description",     
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18,
+                                color: Colors.grey.shade900,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Text(
+                              data['description'] ??
+                                  "No description available.",
+                              style: TextStyle(
+                                fontSize: 15,
+                                height: 1.6,
+                                color: Colors.grey.shade700,
+                              ),
+                            ),
+                            const SizedBox(height: 100),
+                          ],
                         ),
                       ),
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    // Category
-                    InfoRow(
-                      label: "Category",
-                      value: data['category'] ?? 'Unknown',
-                      labelColor: brownColr,
-                      valueColor: primaryColor,
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // Price & Quantity
-                    isWide
-                        ? Row(
-                            children: [
-                              Expanded(
-                                child: PriceCard(price: data['price'] ?? 0),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: QuantityCard(
-                                  qty: data['quantity'] ?? 0,
-                                  unit: data['unit'] ?? "",
-                                ),
-                              ),
-                            ],
-                          )
-                        : Column(
-                            children: [
-                              PriceCard(price: data['price'] ?? 0),
-                              const SizedBox(height: 12),
-                              QuantityCard(
-                                qty: data['quantity'] ?? 0,
-                                unit: data['unit'] ?? "",
-                              ),
-                            ],
-                          ),
-
-                    const SizedBox(height: 16),
-
-                    // Description
-                    DetailCard(
-                      color: const Color.fromARGB(255, 90, 177, 248),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: const [
-                              Icon(Icons.description, color: whiteColor),
-                              SizedBox(width: 8),
-                              Text(
-                                "Description",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          Text(data['description'] ?? 'No Description'),
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              },
+                    ],
+                  ),
+                ),
+              ],
             );
           },
         ),
@@ -177,215 +214,75 @@ class ProductDetailPage extends StatelessWidget {
     );
   }
 
-  void _confirmDelete(BuildContext context, String productId) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        elevation: 8,
-        backgroundColor: Colors.white,
-        titlePadding: const EdgeInsets.all(0),
-        contentPadding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
-        actionsPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-        title: Container(
-          padding: const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: Colors.red.shade50,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
+  // 🔥 Circle Button for AppBar
+  Widget _circleButton(
+    BuildContext context, {
+    required IconData icon,
+    Color color = Colors.black87,
+    required VoidCallback onTap,
+  }) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 8,
+            color: Colors.black.withOpacity(0.1),
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: IconButton(
+        icon: Icon(icon, color: color, size: 20),
+        onPressed: onTap,
+      ),
+    );
+  }
+
+  // 🔥 Gradient Info Card
+  Widget _infoCard({
+    required String title,
+    required String value,
+    required IconData icon,
+    required Color color1,
+    required Color color2,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(colors: [color1, color2]),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: color1.withOpacity(0.25),
+            blurRadius: 18,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: Colors.white, size: 22),
+          const SizedBox(height: 8),
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 13,
+              fontWeight: FontWeight.w400,
             ),
           ),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.red.shade100,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.delete_outline_rounded,
-                  color: Colors.red.shade600,
-                  size: 24,
-                ),
-              ),
-              const SizedBox(width: 16),
-              const Text(
-                "Delete Product",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black87,
-                ),
-              ),
-            ],
-          ),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Are you sure you want to delete this product?",
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.black54,
-                height: 1.4,
-              ),
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
             ),
-            const SizedBox(height: 8),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.orange.shade50,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.orange.shade200, width: 1),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.warning_amber_rounded,
-                    color: Colors.orange.shade600,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 8),
-                  const Expanded(
-                    child: Text(
-                      "This action cannot be undone",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black54,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          Row(
-            children: [
-              Expanded(
-                child: TextButton(
-                  onPressed: () => Navigator.pop(ctx),
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: BorderSide(color: Colors.grey.shade300, width: 1),
-                    ),
-                  ),
-                  child: const Text(
-                    "Cancel",
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    // Show loading state
-                    showDialog(
-                      context: ctx,
-                      barrierDismissible: false,
-                      builder: (loadingCtx) => const Center(
-                        child: CircularProgressIndicator(color: Colors.red),
-                      ),
-                    );
-
-                    try {
-                      await FirebaseFirestore.instance
-                          .collection('products')
-                          .doc(productId)
-                          .delete();
-
-                      Navigator.of(ctx).pop(); // Close loading dialog
-                      Navigator.of(ctx).pop(); // Close delete dialog
-                      Navigator.of(context).pop(); // Go back to previous screen
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Row(
-                            children: [
-                              const Icon(
-                                Icons.check_circle_outline,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 8),
-                              const Text(
-                                'Product deleted successfully',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                          backgroundColor: Colors.green,
-                          behavior: SnackBarBehavior.floating,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          margin: const EdgeInsets.all(16),
-                        ),
-                      );
-                    } catch (error) {
-                      Navigator.of(ctx).pop(); // Close loading dialog
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Row(
-                            children: [
-                              const Icon(
-                                Icons.error_outline,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                              const SizedBox(width: 8),
-                              const Text(
-                                'Failed to delete product',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                          backgroundColor: Colors.red,
-                          behavior: SnackBarBehavior.floating,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          margin: const EdgeInsets.all(16),
-                        ),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text(
-                    "Delete",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                ),
-              ),
-            ],
           ),
         ],
       ),

@@ -13,7 +13,6 @@ import 'package:mini_wheelz/screens/product_details.dart';
 import 'package:mini_wheelz/widgets/shimmer.dart';
 import 'package:shimmer/shimmer.dart';
 
-
 class ProductListPage extends StatelessWidget {
   ProductListPage({super.key});
 
@@ -30,10 +29,9 @@ class ProductListPage extends StatelessWidget {
     List<String> imageUrls = [];
 
     for (var file in files) {
-      final request =
-          http.MultipartRequest('POST', url)
-            ..fields['upload_preset'] = uploadPreset
-            ..files.add(await http.MultipartFile.fromPath('file', file.path));
+      final request = http.MultipartRequest('POST', url)
+        ..fields['upload_preset'] = uploadPreset
+        ..files.add(await http.MultipartFile.fromPath('file', file.path));
 
       final response = await request.send();
 
@@ -87,10 +85,8 @@ class ProductListPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    onChanged:
-                        (value) => context
-                            .read<ProductSearchCubit>()
-                            .updateQuery(value),
+                    onChanged: (value) =>
+                        context.read<ProductSearchCubit>().updateQuery(value),
                   );
                 },
               ),
@@ -101,10 +97,9 @@ class ProductListPage extends StatelessWidget {
               child: BlocBuilder<ProductSearchCubit, String>(
                 builder: (context, searchQuery) {
                   return StreamBuilder<QuerySnapshot>(
-                    stream:
-                        productsRef
-                            .orderBy('timestamp', descending: true)
-                            .snapshots(),
+                    stream: productsRef
+                        .orderBy('timestamp', descending: true)
+                        .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return Center(
@@ -119,15 +114,13 @@ class ProductListPage extends StatelessWidget {
                       }
 
                       final docs = snapshot.data?.docs ?? [];
-                      final filteredDocs =
-                          docs.where((doc) {
-                            final data = doc.data() as Map<String, dynamic>;
-                            final name = (data['name'] ?? '').toLowerCase();
-                            final category =
-                                (data['category'] ?? '').toLowerCase();
-                            return name.contains(searchQuery.toLowerCase()) ||
-                                category.contains(searchQuery.toLowerCase());
-                          }).toList();
+                      final filteredDocs = docs.where((doc) {
+                        final data = doc.data() as Map<String, dynamic>;
+                        final name = (data['name'] ?? '').toLowerCase();
+                        final category = (data['category'] ?? '').toLowerCase();
+                        return name.contains(searchQuery.toLowerCase()) ||
+                            category.contains(searchQuery.toLowerCase());
+                      }).toList();
 
                       if (filteredDocs.isEmpty) {
                         return Center(
@@ -143,13 +136,10 @@ class ProductListPage extends StatelessWidget {
                         return ListView.separated(
                           padding: const EdgeInsets.all(16),
                           itemCount: filteredDocs.length,
-                          separatorBuilder:
-                              (_, __) => const SizedBox(height: 12),
-                          itemBuilder:
-                              (context, index) => _buildProductCard(
-                                context,
-                                filteredDocs[index],
-                              ),
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(height: 12),
+                          itemBuilder: (context, index) =>
+                              _buildProductCard(context, filteredDocs[index]),
                         );
                       } else {
                         return GridView.builder(
@@ -162,11 +152,8 @@ class ProductListPage extends StatelessWidget {
                                 mainAxisSpacing: 16,
                                 childAspectRatio: 3,
                               ),
-                          itemBuilder:
-                              (context, index) => _buildProductCard(
-                                context,
-                                filteredDocs[index],
-                              ),
+                          itemBuilder: (context, index) =>
+                              _buildProductCard(context, filteredDocs[index]),
                         );
                       }
                     },
@@ -187,15 +174,13 @@ class ProductListPage extends StatelessWidget {
     final firstImage = images.isNotEmpty ? images[0] : '';
 
     return InkWell(
-      onTap:
-          () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder:
-                  (_) =>
-                      ProductDetailPage(productData: {...data, 'id': doc.id}),
-            ),
-          ),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) =>
+              ProductDetailPage(productData: {...data, 'id': doc.id}),
+        ),
+      ),
       child: Card(
         color: whiteColor,
         elevation: 3,
@@ -210,43 +195,36 @@ class ProductListPage extends StatelessWidget {
                 child: SizedBox(
                   width: 70,
                   height: 70,
-                  child:
-                      firstImage.isNotEmpty
-                          ? Stack(
-                            children: [
-                              // Shimmer background
-                              Shimmer.fromColors(
-                                baseColor: Colors.grey[300]!,
-                                highlightColor: Colors.grey[100]!,
-                                child: Container(
-                                  width: 70,
-                                  height: 70,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              // Actual image
-                              Image.network(
-                                firstImage,
+                  child: firstImage.isNotEmpty
+                      ? Stack(
+                          children: [
+                            // Shimmer background
+                            Shimmer.fromColors(
+                              baseColor: Colors.grey[300]!,
+                              highlightColor: Colors.grey[100]!,
+                              child: Container(
                                 width: 70,
                                 height: 70,
-                                fit: BoxFit.cover,
-                                loadingBuilder: (
-                                  context,
-                                  child,
-                                  loadingProgress,
-                                ) {
-                                  if (loadingProgress == null) return child;
-                                  return const SizedBox(); // shimmer stays
-                                },
-                                errorBuilder:
-                                    (_, __, ___) => const Icon(
-                                      Icons.broken_image,
-                                      size: 40,
-                                    ),
+                                color: Colors.white,
                               ),
-                            ],
-                          )
-                          : const Icon(Icons.image, size: 40),
+                            ),
+                            // Actual image
+                            Image.network(
+                              firstImage,
+                              width: 70,
+                              height: 70,
+                              fit: BoxFit.cover,
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
+                                    return const SizedBox(); // shimmer stays
+                                  },
+                              errorBuilder: (_, __, ___) =>
+                                  const Icon(Icons.broken_image, size: 40),
+                            ),
+                          ],
+                        )
+                      : const Icon(Icons.image, size: 40),
                 ),
               ),
               const SizedBox(width: 12),
@@ -268,7 +246,7 @@ class ProductListPage extends StatelessWidget {
                       style: TextStyle(color: greyColor),
                     ),
                     Text(
-                      '₹ ${data['price']} | ${data['quantity']} ${(data['unit'] ?? '').replaceFirst(RegExp(r'^per\s*', caseSensitive: false), '')}',
+                      '₹ ${data['price']} | QTY  ${data['quantity']}  | ${(data['unit'] ?? '').replaceFirst(RegExp(r'^per\s*', caseSensitive: false), '')}',
                       style: TextStyle(color: primaryColor),
                     ),
                   ],

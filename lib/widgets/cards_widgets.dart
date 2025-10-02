@@ -11,7 +11,6 @@ class DetailCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Card(
       color: color,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -104,12 +103,12 @@ class QuantityCard extends StatelessWidget {
           const Icon(Icons.inventory, color: whiteColor),
           const SizedBox(height: 6),
           const Text(
-            "Quantity",
+            "Quantity And Scale",
             style: TextStyle(fontWeight: FontWeight.w600, color: whiteColor),
           ),
           const SizedBox(height: 6),
           Text(
-            "$qty ,$unit",
+            "$qty  |  $unit",
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               color: whiteColor,
