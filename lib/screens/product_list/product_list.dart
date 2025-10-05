@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_wheelz/bloc/product_search_cubit.dart';
 import 'package:mini_wheelz/core/colors.dart';
-import 'package:mini_wheelz/screens/product_details.dart';
+import 'package:mini_wheelz/screens/product_details/product_details.dart';
 import 'package:mini_wheelz/widgets/shimmer.dart';
 import 'package:shimmer/shimmer.dart';
 

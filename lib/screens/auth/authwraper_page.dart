@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:mini_wheelz/screens/admin_screen.dart';
-import 'package:mini_wheelz/screens/signin_page.dart';
+import 'package:mini_wheelz/screens/admin_screen/admin_screen.dart';
+import 'package:mini_wheelz/screens/auth/signin/signin_page.dart';
 
 class AuthWrapper extends StatelessWidget {
   const AuthWrapper({super.key});

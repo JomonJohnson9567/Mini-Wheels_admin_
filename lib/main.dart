@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_wheelz/bloc/admin_orders_filter_bloc.dart';
 import 'package:mini_wheelz/bloc/category_bloc.dart';
 import 'package:mini_wheelz/bloc/product_bloc.dart';
-import 'package:mini_wheelz/screens/authwraper_page.dart';
+import 'package:mini_wheelz/screens/auth/authwraper_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -4,11 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_wheelz/bloc/admin_orders_bloc.dart';
 import 'package:mini_wheelz/bloc/dashboard_bloc.dart';
 import 'package:mini_wheelz/core/colors.dart';
-import 'package:mini_wheelz/screens/add_category.dart';
-import 'package:mini_wheelz/screens/add_products.dart';
-import 'package:mini_wheelz/screens/home.dart';
-import 'package:mini_wheelz/screens/orders_screen.dart';
-import 'package:mini_wheelz/screens/product_list.dart';
+import 'package:mini_wheelz/screens/add_category/add_category.dart';
+import 'package:mini_wheelz/screens/add_product/add_products.dart';
+import 'package:mini_wheelz/screens/home/home.dart';
+import 'package:mini_wheelz/screens/order_screen/orders_screen.dart';
+import 'package:mini_wheelz/screens/product_list/product_list.dart';
 import 'package:mini_wheelz/widgets/shimmer.dart';
  
 

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_wheelz/bloc/product_detail_cubit.dart';
-import 'package:mini_wheelz/core/colors.dart';
-import 'package:mini_wheelz/screens/edit_product.dart';
+import 'package:mini_wheelz/screens/edit_product/edit_product.dart';
+import 'package:mini_wheelz/screens/product_details/widget/circle_button.dart';
+import 'package:mini_wheelz/screens/product_details/widget/infocard_widget.dart';
 import 'package:mini_wheelz/widgets/cards_widgets.dart';
 import 'package:mini_wheelz/widgets/confirm_delete_product.dart';
 
@@ -28,13 +29,13 @@ class ProductDetailPage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          leading: _circleButton(
+          leading: circleButton(
             context,
             icon: Icons.arrow_back_ios_new,
             onTap: () => Navigator.pop(context),
           ),
           actions: [
-            _circleButton(
+            circleButton(
               context,
               icon: Icons.edit_outlined,
               onTap: () async {
@@ -53,7 +54,7 @@ class ProductDetailPage extends StatelessWidget {
               },
             ),
             const SizedBox(width: 8),
-            _circleButton(
+            circleButton(
               context,
               icon: Icons.delete_outline,
               color: Colors.redAccent,
@@ -155,7 +156,7 @@ class ProductDetailPage extends StatelessWidget {
                             Row(
                               children: [
                                 Expanded(
-                                  child: _infoCard(
+                                  child: infoCard(
                                     title: "Price",
                                     value:
                                         "₹${(data['price'] ?? 0).toStringAsFixed(2)}",
@@ -166,7 +167,7 @@ class ProductDetailPage extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 16),
                                 Expanded(
-                                  child: _infoCard(
+                                  child: infoCard(
                                     title: "In Stock",
                                     value:
                                         " ${data['quantity'] ?? 0} |${data['unit'] ?? ""}",
@@ -182,7 +183,7 @@ class ProductDetailPage extends StatelessWidget {
 
                             // Description
                             Text(
-                              "Description",     
+                              "Description",
                               style: TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 18,
@@ -210,81 +211,6 @@ class ProductDetailPage extends StatelessWidget {
             );
           },
         ),
-      ),
-    );
-  }
-
-  // 🔥 Circle Button for AppBar
-  Widget _circleButton(
-    BuildContext context, {
-    required IconData icon,
-    Color color = Colors.black87,
-    required VoidCallback onTap,
-  }) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 8,
-            color: Colors.black.withOpacity(0.1),
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: IconButton(
-        icon: Icon(icon, color: color, size: 20),
-        onPressed: onTap,
-      ),
-    );
-  }
-
-  // 🔥 Gradient Info Card
-  Widget _infoCard({
-    required String title,
-    required String value,
-    required IconData icon,
-    required Color color1,
-    required Color color2,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [color1, color2]),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: color1.withOpacity(0.25),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, color: Colors.white, size: 22),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 13,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            value,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ],
       ),
     );
   }
