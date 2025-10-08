@@ -1,19 +1,16 @@
-
 // ignore: camel_case_types
 import 'package:flutter/material.dart';
 import 'package:mini_wheelz/core/colors.dart';
 
 class product_adding_gif extends StatelessWidget {
-  const product_adding_gif({
-    super.key,
-  });
+  const product_adding_gif({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       height: double.infinity,
-      color: Colors.white,
+      color: whiteColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -22,7 +19,7 @@ class product_adding_gif extends StatelessWidget {
             width: 220,
             height: 220,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: whiteColor,
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
@@ -45,7 +42,7 @@ class product_adding_gif extends StatelessWidget {
                     width: 220,
                     height: 220,
                     decoration: BoxDecoration(
-                      color: Colors.grey.shade50,
+                      color: lightGrey,
                       borderRadius: BorderRadius.circular(24),
                     ),
                     child: const Center(
@@ -65,16 +62,13 @@ class product_adding_gif extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
-              color: Colors.grey.shade800,
+              color: textPrimary,
             ),
           ),
           const SizedBox(height: 12),
           Text(
             'Please wait while we save your product',
-            style: TextStyle(
-              fontSize: 15,
-              color: Colors.grey.shade500,
-            ),
+            style: TextStyle(fontSize: 15, color: textSecondary),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 40),
@@ -84,10 +78,8 @@ class product_adding_gif extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(2),
               child: LinearProgressIndicator(
-                backgroundColor: Colors.grey.shade200,
-                valueColor: const AlwaysStoppedAnimation<Color>(
-                  primaryColor,
-                ),
+                backgroundColor: borderGrey,
+                valueColor: const AlwaysStoppedAnimation<Color>(primaryColor),
               ),
             ),
           ),

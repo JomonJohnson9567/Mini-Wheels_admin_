@@ -78,7 +78,10 @@ class ProductListPage extends StatelessWidget {
                     controller: _searchController,
                     decoration: InputDecoration(
                       hintText: 'Search by name or category',
-                      prefixIcon: const Icon(Icons.search),
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        color: textSecondary,
+                      ),
                       filled: true,
                       fillColor: whiteColor,
                       border: OutlineInputBorder(
@@ -200,12 +203,12 @@ class ProductListPage extends StatelessWidget {
                           children: [
                             // Shimmer background
                             Shimmer.fromColors(
-                              baseColor: Colors.grey[300]!,
-                              highlightColor: Colors.grey[100]!,
+                              baseColor: shimmerBase,
+                              highlightColor: shimmerHighlight,
                               child: Container(
                                 width: 70,
                                 height: 70,
-                                color: Colors.white,
+                                color: whiteColor,
                               ),
                             ),
                             // Actual image
@@ -219,12 +222,15 @@ class ProductListPage extends StatelessWidget {
                                     if (loadingProgress == null) return child;
                                     return const SizedBox(); // shimmer stays
                                   },
-                              errorBuilder: (_, __, ___) =>
-                                  const Icon(Icons.broken_image, size: 40),
+                              errorBuilder: (_, __, ___) => const Icon(
+                                Icons.broken_image,
+                                size: 40,
+                                color: textSecondary,
+                              ),
                             ),
                           ],
                         )
-                      : const Icon(Icons.image, size: 40),
+                      : const Icon(Icons.image, size: 40, color: textSecondary),
                 ),
               ),
               const SizedBox(width: 12),
@@ -255,7 +261,7 @@ class ProductListPage extends StatelessWidget {
 
               // 🗑 Delete button
               IconButton(
-                icon: const Icon(Icons.delete, color: Colors.red),
+                icon: const Icon(Icons.delete, color: errorColor),
                 onPressed: () => _deleteProduct(context, doc.id),
               ),
             ],

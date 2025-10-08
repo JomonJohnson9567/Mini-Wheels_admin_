@@ -5,14 +5,14 @@ InputDecoration decoration(String label, IconData icon) => InputDecoration(
   labelText: label,
   prefixIcon: Icon(icon, color: primaryColor, size: 22),
   filled: true,
-  fillColor: Colors.grey.shade50,
+  fillColor: lightGrey,
   contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
   border: OutlineInputBorder(
     borderRadius: BorderRadius.circular(16),
     borderSide: BorderSide.none,
   ),
   enabledBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.grey.shade200, width: 1.5),
+    borderSide: BorderSide(color: borderGrey, width: 1.5),
     borderRadius: BorderRadius.circular(16),
   ),
   focusedBorder: OutlineInputBorder(
@@ -20,12 +20,12 @@ InputDecoration decoration(String label, IconData icon) => InputDecoration(
     borderRadius: BorderRadius.circular(16),
   ),
   errorBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.red.shade300, width: 1.5),
+    borderSide: const BorderSide(color: errorColor, width: 1.5),
     borderRadius: BorderRadius.circular(16),
   ),
   focusedErrorBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.red.shade400, width: 2),
+    borderSide: const BorderSide(color: errorColor, width: 2),
     borderRadius: BorderRadius.circular(16),
   ),
-  labelStyle: TextStyle(color: Colors.grey.shade600, fontSize: 15),
+  labelStyle: const TextStyle(color: textSecondary, fontSize: 15),
 );

@@ -6,6 +6,7 @@ import 'package:mini_wheelz/screens/product_details/widget/circle_button.dart';
 import 'package:mini_wheelz/screens/product_details/widget/infocard_widget.dart';
 import 'package:mini_wheelz/widgets/cards_widgets.dart';
 import 'package:mini_wheelz/widgets/confirm_delete_product.dart';
+import 'package:mini_wheelz/core/colors.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final Map<String, dynamic> productData;
@@ -24,7 +25,7 @@ class ProductDetailPage extends StatelessWidget {
         BlocProvider(create: (_) => ImageCarouselCubit()),
       ],
       child: Scaffold(
-        backgroundColor: const Color(0xFFF3F6FB),
+        backgroundColor: backgroundColor,
         extendBody: true,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -57,7 +58,7 @@ class ProductDetailPage extends StatelessWidget {
             circleButton(
               context,
               icon: Icons.delete_outline,
-              color: Colors.redAccent,
+              color: errorColor,
               onTap: () => confirmDelete(context, productId),
             ),
             const SizedBox(width: 12),
@@ -96,7 +97,7 @@ class ProductDetailPage extends StatelessWidget {
                       else
                         Container(
                           height: 380,
-                          color: Colors.grey.shade200,
+                          color: lightGrey,
                           child: const Center(
                             child: Icon(Icons.image, size: 80),
                           ),
@@ -106,7 +107,7 @@ class ProductDetailPage extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(20),
                         decoration: const BoxDecoration(
-                          color: Colors.white,
+                          color: whiteColor,
                           borderRadius: BorderRadius.vertical(
                             top: Radius.circular(28),
                           ),
@@ -128,7 +129,7 @@ class ProductDetailPage extends StatelessWidget {
                                 fontSize: 26,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: -0.5,
-                                color: Color(0xFF222222),
+                                color: textPrimary,
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -138,13 +139,13 @@ class ProductDetailPage extends StatelessWidget {
                               avatar: const Icon(
                                 Icons.category_outlined,
                                 size: 18,
-                                color: Colors.white,
+                                color: whiteColor,
                               ),
                               label: Text(
                                 data['category'] ?? "Unknown",
-                                style: const TextStyle(color: Colors.white),
+                                style: const TextStyle(color: whiteColor),
                               ),
-                              backgroundColor: Colors.indigo.shade400,
+                              backgroundColor: primaryDark,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -187,7 +188,7 @@ class ProductDetailPage extends StatelessWidget {
                               style: TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 18,
-                                color: Colors.grey.shade900,
+                                color: textPrimary,
                               ),
                             ),
                             const SizedBox(height: 12),
@@ -197,7 +198,7 @@ class ProductDetailPage extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 15,
                                 height: 1.6,
-                                color: Colors.grey.shade700,
+                                color: textSecondary,
                               ),
                             ),
                             const SizedBox(height: 100),

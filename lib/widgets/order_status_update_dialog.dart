@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mini_wheelz/bloc/admin_orders_bloc.dart';
 import 'package:mini_wheelz/bloc/admin_orders_event.dart';
 import 'package:mini_wheelz/core/utils/order_status_helper.dart';
- 
+import 'package:mini_wheelz/core/colors.dart';
 
 class OrderStatusUpdateDialog extends StatelessWidget {
   final Map<String, dynamic> order;
@@ -20,7 +20,7 @@ class OrderStatusUpdateDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       title: Text(
         'Update Order Status',
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: const TextStyle(fontWeight: FontWeight.bold, color: textPrimary),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -28,42 +28,44 @@ class OrderStatusUpdateDialog extends StatelessWidget {
         children: [
           Text(
             'Order #${(order['id'] as String).substring((order['id'] as String).length - 6)}',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: textPrimary,
+            ),
           ),
           const SizedBox(height: 6),
           Text(
             'Current status: $currentStatus',
-            style: TextStyle(color: Colors.grey[700], fontSize: 14),
+            style: const TextStyle(color: textSecondary, fontSize: 14),
           ),
           const SizedBox(height: 20),
           const Text(
             'Select new status:',
-            style: TextStyle(fontWeight: FontWeight.w600),
+            style: TextStyle(fontWeight: FontWeight.w600, color: textPrimary),
           ),
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children:
-                OrderStatusHelper.getUpdateStatusOptions()
-                    .map(
-                      (statusOption) => ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 10,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        onPressed:
-                            () =>
-                                _updateStatus(context, statusOption['value']!),
-                        child: Text(statusOption['label']!),
+            children: OrderStatusHelper.getUpdateStatusOptions()
+                .map(
+                  (statusOption) => ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
                       ),
-                    )
-                    .toList(),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    onPressed: () =>
+                        _updateStatus(context, statusOption['value']!),
+                    child: Text(statusOption['label']!),
+                  ),
+                )
+                .toList(),
           ),
         ],
       ),

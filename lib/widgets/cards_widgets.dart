@@ -71,10 +71,10 @@ class PriceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DetailCard(
-      color: const Color.fromARGB(255, 177, 233, 37),
+      color: priceCardColor,
       child: Column(
         children: [
-          const Icon(Icons.money, color: Colors.black),
+          const Icon(Icons.money, color: blackColor),
           const SizedBox(height: 6),
           const Text("Price", style: TextStyle(fontWeight: FontWeight.w600)),
           const SizedBox(height: 6),
@@ -97,7 +97,7 @@ class QuantityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DetailCard(
-      color: Colors.indigo,
+      color: primaryDark,
       child: Column(
         children: [
           const Icon(Icons.inventory, color: whiteColor),
@@ -172,7 +172,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
           return ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: Container(
-              color: Colors.black12, // background in case of empty space
+              color: black12, // background in case of empty space
               child: Image.network(
                 widget.images[index],
                 fit: BoxFit.contain, // 👈 show full image without stretching
@@ -181,9 +181,9 @@ class _ImageCarouselState extends State<ImageCarousel> {
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
                   return Shimmer.fromColors(
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                    child: Container(color: Colors.white),
+                    baseColor: shimmerBase,
+                    highlightColor: shimmerHighlight,
+                    child: Container(color: whiteColor),
                   );
                 },
               ),

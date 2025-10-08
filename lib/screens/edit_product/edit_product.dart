@@ -94,9 +94,7 @@ class EditProductScreen extends StatelessWidget {
       context: context,
       barrierDismissible: false,
       builder: (context) =>
-          EnhancedUIComponents.loadingWidget(
-       
-            message: 'Updating product...'),
+          EnhancedUIComponents.loadingWidget(message: 'Updating product...'),
     );
   }
 
@@ -144,7 +142,7 @@ class EditProductScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black87,
+                  color: textPrimary,
                 ),
               ),
             ],
@@ -171,7 +169,7 @@ class EditProductScreen extends StatelessWidget {
                           width: 120,
                           height: 120,
                           decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
+                            color: borderGrey,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: const Center(
@@ -183,10 +181,10 @@ class EditProductScreen extends StatelessWidget {
                         width: 120,
                         height: 120,
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
+                          color: borderGrey,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Icon(Icons.error, color: Colors.red),
+                        child: const Icon(Icons.error, color: errorColor),
                       ),
                     ),
                   ),
@@ -197,29 +195,19 @@ class EditProductScreen extends StatelessWidget {
             Container(
               height: 120,
               decoration: BoxDecoration(
-                color: Colors.grey.shade100,
+                color: lightGrey,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: Colors.grey.shade300,
-                  style: BorderStyle.solid,
-                ),
+                border: Border.all(color: borderGrey, style: BorderStyle.solid),
               ),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.image_outlined,
-                      size: 32,
-                      color: Colors.grey.shade500,
-                    ),
+                    Icon(Icons.image_outlined, size: 32, color: textSecondary),
                     const SizedBox(height: 8),
                     Text(
                       'No images selected',
-                      style: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontSize: 14,
-                      ),
+                      style: TextStyle(color: textSecondary, fontSize: 14),
                     ),
                   ],
                 ),
@@ -307,7 +295,7 @@ class EditProductScreen extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.black87,
+                                color: textPrimary,
                               ),
                             ),
                           ],

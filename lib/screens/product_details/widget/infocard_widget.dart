@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mini_wheelz/core/colors.dart';
 
 Widget infoCard({
   required String title,
@@ -23,12 +24,12 @@ Widget infoCard({
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, color: Colors.white, size: 22),
+        Icon(icon, color: whiteColor, size: 22),
         const SizedBox(height: 8),
         Text(
           title,
           style: const TextStyle(
-            color: Colors.white70,
+            color: whiteColor,
             fontSize: 13,
             fontWeight: FontWeight.w400,
           ),
@@ -37,7 +38,7 @@ Widget infoCard({
         Text(
           value,
           style: const TextStyle(
-            color: Colors.white,
+            color: whiteColor,
             fontSize: 20,
             fontWeight: FontWeight.w700,
           ),

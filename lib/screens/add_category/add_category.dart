@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mini_wheelz/core/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mini_wheelz/bloc/category_bloc.dart';
 import 'package:mini_wheelz/bloc/category_event.dart';
 import 'package:mini_wheelz/bloc/category_state.dart';
-import 'package:mini_wheelz/core/colors.dart';
+
 import 'package:mini_wheelz/widgets/responsive.dart';
 
 class AddCategoryPage extends StatelessWidget {
@@ -27,10 +28,10 @@ class AddCategoryPage extends StatelessWidget {
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Colors.white, Colors.grey.shade50],
+              colors: [whiteColor, lightGrey],
             ),
           ),
           child: Column(
@@ -42,14 +43,10 @@ class AddCategoryPage extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.orange.shade50,
+                      color: warning50,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Icon(
-                      Icons.edit,
-                      color: Colors.orange.shade700,
-                      size: 24,
-                    ),
+                    child: Icon(Icons.edit, color: warning600, size: 24),
                   ),
                   const SizedBox(width: 16),
                   const Text(
@@ -65,21 +62,18 @@ class AddCategoryPage extends StatelessWidget {
                 decoration: InputDecoration(
                   hintText: "Enter new name",
                   filled: true,
-                  fillColor: Colors.grey.shade50,
+                  fillColor: lightGrey,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.grey.shade300),
+                    borderSide: BorderSide(color: borderGrey),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(
-                      color: Colors.orange.shade400,
-                      width: 2,
-                    ),
+                    borderSide: BorderSide(color: warning600, width: 2),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
@@ -113,8 +107,8 @@ class AddCategoryPage extends StatelessWidget {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange.shade600,
-                      foregroundColor: Colors.white,
+                      backgroundColor: warningColor,
+                      foregroundColor: whiteColor,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,
@@ -154,7 +148,7 @@ class AddCategoryPage extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [Colors.white, Colors.red.shade50.withOpacity(0.3)],
+              colors: [whiteColor, error50.withOpacity(0.3)],
             ),
           ),
           child: Column(
@@ -163,14 +157,10 @@ class AddCategoryPage extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.red.shade50,
+                  color: error50,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  Icons.delete_outline,
-                  color: Colors.red.shade700,
-                  size: 40,
-                ),
+                child: Icon(Icons.delete_outline, color: error600, size: 40),
               ),
               const SizedBox(height: 20),
               const Text(
@@ -181,7 +171,7 @@ class AddCategoryPage extends StatelessWidget {
               const Text(
                 "Are you sure you want to delete this category? This action cannot be undone.",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 15, color: Colors.grey),
+                style: TextStyle(fontSize: 15, color: textSecondary),
               ),
               const SizedBox(height: 24),
               Row(
@@ -207,7 +197,7 @@ class AddCategoryPage extends StatelessWidget {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: redColor,
-                      foregroundColor: Colors.white,
+                      foregroundColor: whiteColor,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,
@@ -239,7 +229,7 @@ class AddCategoryPage extends StatelessWidget {
     context.read<CategoryBloc>().add(LoadCategoriesEvent());
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: lightGrey,
 
       body: ResponsiveLayout(
         mobile: (context) => _buildContent(context, 16),
@@ -274,7 +264,7 @@ class AddCategoryPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: blackColor.withOpacity(0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -287,23 +277,20 @@ class AddCategoryPage extends StatelessWidget {
                     controller: _controller,
                     decoration: InputDecoration(
                       hintText: "Enter category name",
-                      hintStyle: TextStyle(color: Colors.grey.shade400),
+                      hintStyle: TextStyle(color: textSecondary),
                       filled: true,
-                      fillColor: Colors.grey.shade50,
+                      fillColor: lightGrey,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
+                        borderSide: BorderSide(color: borderGrey),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                          color: Colors.blue.shade400,
-                          width: 2,
-                        ),
+                        borderSide: BorderSide(color: vibrantBlue, width: 2),
                       ),
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16,
@@ -311,7 +298,7 @@ class AddCategoryPage extends StatelessWidget {
                       ),
                       prefixIcon: Icon(
                         Icons.category_outlined,
-                        color: Colors.grey.shade600,
+                        color: textSecondary,
                       ),
                     ),
                   ),
@@ -327,8 +314,8 @@ class AddCategoryPage extends StatelessWidget {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue.shade600,
-                    foregroundColor: Colors.white,
+                    backgroundColor: vibrantBlue,
+                    foregroundColor: whiteColor,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 28,
                       vertical: 16,
@@ -365,7 +352,7 @@ class AddCategoryPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: blackColor.withOpacity(0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -374,9 +361,9 @@ class AddCategoryPage extends StatelessWidget {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search, color: Colors.grey.shade600),
+                prefixIcon: const Icon(Icons.search, color: textSecondary),
                 hintText: 'Search categories...',
-                hintStyle: TextStyle(color: Colors.grey.shade400),
+                hintStyle: const TextStyle(color: textSecondary),
                 filled: true,
                 fillColor: whiteColor,
                 border: OutlineInputBorder(
@@ -409,7 +396,7 @@ class AddCategoryPage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey.shade800,
+                    color: textPrimary,
                   ),
                 ),
                 BlocBuilder<CategoryBloc, CategoryState>(
@@ -421,13 +408,13 @@ class AddCategoryPage extends StatelessWidget {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.blue.shade50,
+                          color: vibrantBlue,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
                           '${state.categories.length}',
                           style: TextStyle(
-                            color: Colors.blue.shade700,
+                            color: whiteColor,
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),
@@ -460,7 +447,7 @@ class AddCategoryPage extends StatelessWidget {
                           Icon(
                             Icons.category_outlined,
                             size: 80,
-                            color: Colors.grey.shade300,
+                            color: borderGrey,
                           ),
                           const SizedBox(height: 16),
                           Text(
@@ -475,7 +462,7 @@ class AddCategoryPage extends StatelessWidget {
                           Text(
                             'Add your first category above',
                             style: TextStyle(
-                              color: Colors.grey.shade400,
+                              color: textSecondary,
                               fontSize: 14,
                             ),
                           ),
@@ -495,7 +482,7 @@ class AddCategoryPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.04),
+                              color: blackColor.withOpacity(0.04),
                               blurRadius: 8,
                               offset: const Offset(0, 2),
                             ),
@@ -509,12 +496,12 @@ class AddCategoryPage extends StatelessWidget {
                           leading: Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: Colors.blue.shade50,
+                              color: vibrantBlue,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Icon(
                               Icons.category,
-                              color: Colors.blue.shade600,
+                              color: whiteColor,
                               size: 24,
                             ),
                           ),
@@ -530,13 +517,13 @@ class AddCategoryPage extends StatelessWidget {
                             children: [
                               Container(
                                 decoration: BoxDecoration(
-                                  color: Colors.orange.shade50,
+                                  color: warning50,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: IconButton(
                                   icon: Icon(
                                     Icons.edit_outlined,
-                                    color: Colors.orange.shade700,
+                                    color: warning600,
                                     size: 20,
                                   ),
                                   onPressed: () =>
@@ -547,13 +534,13 @@ class AddCategoryPage extends StatelessWidget {
                               const SizedBox(width: 8),
                               Container(
                                 decoration: BoxDecoration(
-                                  color: Colors.red.shade50,
+                                  color: error50,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: IconButton(
                                   icon: Icon(
                                     Icons.delete_outline,
-                                    color: Colors.red.shade700,
+                                    color: error600,
                                     size: 20,
                                   ),
                                   onPressed: () =>

@@ -5,7 +5,6 @@ import 'package:mini_wheelz/bloc/admin_orders_event.dart';
 import 'package:mini_wheelz/bloc/admin_orders_filter_bloc.dart';
 import 'package:mini_wheelz/core/colors.dart';
 import 'package:mini_wheelz/core/utils/order_status_helper.dart';
- 
 
 class AdminOrdersFilterWidget extends StatelessWidget {
   const AdminOrdersFilterWidget({super.key});
@@ -29,7 +28,7 @@ class AdminOrdersFilterWidget extends StatelessWidget {
     return TextField(
       decoration: InputDecoration(
         hintText: 'Search by order ID, product, or user...',
-        prefixIcon: const Icon(Icons.search),
+        prefixIcon: const Icon(Icons.search, color: textSecondary),
         filled: true,
         fillColor: whiteColor,
         border: OutlineInputBorder(
@@ -59,15 +58,14 @@ class AdminOrdersFilterWidget extends StatelessWidget {
                 dropdownColor: whiteColor,
                 value: currentState.selectedFilter,
                 isExpanded: true,
-                items:
-                    OrderStatusHelper.getStatusOptions()
-                        .map(
-                          (status) => DropdownMenuItem(
-                            value: status['value']!,
-                            child: Text(status['label']!),
-                          ),
-                        )
-                        .toList(),
+                items: OrderStatusHelper.getStatusOptions()
+                    .map(
+                      (status) => DropdownMenuItem(
+                        value: status['value']!,
+                        child: Text(status['label']!),
+                      ),
+                    )
+                    .toList(),
                 onChanged: (value) {
                   if (value != null) {
                     context.read<AdminOrdersFilterBloc>().add(

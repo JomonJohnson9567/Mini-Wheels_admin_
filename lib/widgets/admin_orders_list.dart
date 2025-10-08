@@ -4,7 +4,7 @@ import 'package:mini_wheelz/bloc/admin_orders_bloc.dart';
 import 'package:mini_wheelz/bloc/admin_orders_event.dart';
 import 'package:mini_wheelz/bloc/admin_orders_state.dart';
 import 'package:mini_wheelz/widgets/admin_order_card.dart';
-
+import 'package:mini_wheelz/core/colors.dart';
 
 class AdminOrdersList extends StatelessWidget {
   const AdminOrdersList({super.key});
@@ -53,11 +53,11 @@ class AdminOrdersList extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.shopping_bag_outlined, size: 64, color: Colors.grey),
+          Icon(Icons.shopping_bag_outlined, size: 64, color: textSecondary),
           SizedBox(height: 16),
           Text(
             'No orders found',
-            style: TextStyle(fontSize: 18, color: Colors.grey),
+            style: TextStyle(fontSize: 18, color: textSecondary),
           ),
         ],
       ),
@@ -69,7 +69,7 @@ class AdminOrdersList extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.error, size: 64, color: Colors.red),
+          const Icon(Icons.error, size: 64, color: errorColor),
           const SizedBox(height: 16),
           Text(message),
           const SizedBox(height: 16),

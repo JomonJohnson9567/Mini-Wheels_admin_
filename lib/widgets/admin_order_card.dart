@@ -125,7 +125,7 @@ class AdminOrderCard extends StatelessWidget {
       children: [
         Row(
           children: [
-            const Icon(Icons.person, size: 16, color: Colors.grey),
+            const Icon(Icons.person, size: 16, color: textSecondary),
             const SizedBox(width: 8),
             Text(order['userName'] ?? 'Unknown User'),
           ],
@@ -133,7 +133,7 @@ class AdminOrderCard extends StatelessWidget {
         const SizedBox(height: 4),
         Row(
           children: [
-            const Icon(Icons.email, size: 16, color: Colors.grey),
+            const Icon(Icons.email, size: 16, color: textSecondary),
             const SizedBox(width: 8),
             Text(order['userEmail'] ?? 'No Email'),
           ],
@@ -160,13 +160,12 @@ class AdminOrderCard extends StatelessWidget {
         width: 80,
         height: 80,
         fit: BoxFit.cover,
-        errorBuilder:
-            (_, __, ___) => Container(
-              width: 80,
-              height: 80,
-              color: Colors.grey[300],
-              child: const Icon(Icons.image_not_supported),
-            ),
+        errorBuilder: (_, __, ___) => Container(
+          width: 80,
+          height: 80,
+          color: lightGrey,
+          child: const Icon(Icons.image_not_supported, color: textSecondary),
+        ),
       ),
     );
   }
@@ -181,18 +180,18 @@ class AdminOrderCard extends StatelessWidget {
         ),
         Text(
           'Category: ${order['productCategory'] ?? 'Unknown'}',
-          style: const TextStyle(fontSize: 12, color: Colors.grey),
+          style: const TextStyle(fontSize: 12, color: textSecondary),
         ),
         Text(
           'Qty: ${order['quantity'] ?? 0}',
-          style: const TextStyle(fontSize: 12, color: Colors.grey),
+          style: const TextStyle(fontSize: 12, color: textSecondary),
         ),
         Text(
           '₹${(order['totalAmount'] as num?)?.toStringAsFixed(2) ?? '0.00'}',
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
-            color: Colors.green,
+            color: successColor,
           ),
         ),
       ],
@@ -205,7 +204,7 @@ class AdminOrderCard extends StatelessWidget {
       children: [
         Text(
           'Placed: ${OrderStatusHelper.formatDate(order['createdAt'] as Timestamp?)}',
-          style: const TextStyle(fontSize: 12, color: Colors.grey),
+          style: const TextStyle(fontSize: 12, color: textSecondary),
         ),
         ElevatedButton(
           onPressed: () => _showStatusUpdateDialog(context),
@@ -225,11 +224,10 @@ class AdminOrderCard extends StatelessWidget {
 
     showDialog(
       context: context,
-      builder:
-          (dialogContext) => BlocProvider.value(
-            value: adminOrdersBloc,
-            child: OrderStatusUpdateDialog(order: order),
-          ),
+      builder: (dialogContext) => BlocProvider.value(
+        value: adminOrdersBloc,
+        child: OrderStatusUpdateDialog(order: order),
+      ),
     );
   }
 }

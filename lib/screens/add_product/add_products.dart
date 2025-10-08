@@ -111,7 +111,7 @@ class AddProductPage extends StatelessWidget {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: textPrimary,
             ),
           ),
         ],
@@ -131,11 +131,11 @@ class AddProductPage extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.grey.shade50,
+              color: lightGrey,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: formState.imageBytes.isEmpty
-                    ? Colors.grey.shade300
+                    ? borderGrey
                     : primaryColor.withOpacity(0.3),
                 width: 2,
                 style: BorderStyle.solid,
@@ -147,13 +147,13 @@ class AddProductPage extends StatelessWidget {
                   Icon(
                     Icons.add_photo_alternate_outlined,
                     size: 48,
-                    color: Colors.grey.shade400,
+                    color: textSecondary,
                   ),
                   const SizedBox(height: 12),
                   Text(
                     "No images selected",
                     style: TextStyle(
-                      color: Colors.grey.shade600,
+                      color: textSecondary,
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
                     ),
@@ -161,7 +161,7 @@ class AddProductPage extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     "Add product images to showcase your item",
-                    style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
+                    style: const TextStyle(color: textSecondary, fontSize: 13),
                     textAlign: TextAlign.center,
                   ),
                 ] else ...[
@@ -176,7 +176,7 @@ class AddProductPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: blackColor.withOpacity(0.1),
                               blurRadius: 8,
                               offset: const Offset(0, 2),
                             ),
@@ -198,7 +198,7 @@ class AddProductPage extends StatelessWidget {
                   Text(
                     "${formState.imageBytes.length} image${formState.imageBytes.length > 1 ? 's' : ''} selected",
                     style: TextStyle(
-                      color: Colors.grey.shade600,
+                      color: textSecondary,
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
                     ),
@@ -277,9 +277,9 @@ class AddProductPage extends StatelessWidget {
 
           Container(
             decoration: BoxDecoration(
-              color: Colors.grey.shade50,
+              color: lightGrey,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.grey.shade200, width: 1.5),
+              border: Border.all(color: borderGrey, width: 1.5),
             ),
             child: DropdownButtonFormField<String>(
               value: formState.selectedUnit,
@@ -297,18 +297,15 @@ class AddProductPage extends StatelessWidget {
                   horizontal: 20,
                 ),
                 border: InputBorder.none,
-                labelStyle: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: 15,
-                ),
+                labelStyle: const TextStyle(color: textSecondary, fontSize: 15),
               ),
               hint: Text(
                 "Select Scale Unit",
-                style: TextStyle(color: Colors.grey.shade500),
+                style: const TextStyle(color: textSecondary),
               ),
               validator: (v) => v == null ? 'Select unit' : null,
               onChanged: (v) => context.read<ProductFormCubit>().setUnit(v),
-              dropdownColor: Colors.white,
+              dropdownColor: whiteColor,
               icon: Icon(
                 Icons.arrow_drop_down_circle_outlined,
                 color: primaryColor,
@@ -334,7 +331,7 @@ class AddProductPage extends StatelessWidget {
                 return Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade50,
+                    color: lightGrey,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: const Center(
@@ -347,9 +344,9 @@ class AddProductPage extends StatelessWidget {
                   .toList();
               return Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade50,
+                  color: lightGrey,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.grey.shade200, width: 1.5),
+                  border: Border.all(color: borderGrey, width: 1.5),
                 ),
                 child: DropdownButtonFormField<String>(
                   value: formState.selectedCategory,
@@ -367,19 +364,19 @@ class AddProductPage extends StatelessWidget {
                       horizontal: 20,
                     ),
                     border: InputBorder.none,
-                    labelStyle: TextStyle(
-                      color: Colors.grey.shade600,
+                    labelStyle: const TextStyle(
+                      color: textSecondary,
                       fontSize: 15,
                     ),
                   ),
                   hint: Text(
                     "Select Category",
-                    style: TextStyle(color: Colors.grey.shade500),
+                    style: const TextStyle(color: textSecondary),
                   ),
                   validator: (v) => v == null ? 'Select category' : null,
                   onChanged: (v) =>
                       context.read<ProductFormCubit>().setCategory(v),
-                  dropdownColor: Colors.white,
+                  dropdownColor: whiteColor,
                   icon: Icon(
                     Icons.arrow_drop_down_circle_outlined,
                     color: primaryColor,
@@ -441,7 +438,7 @@ class AddProductPage extends StatelessWidget {
                     Expanded(child: Text('Product added successfully')),
                   ],
                 ),
-                backgroundColor: Colors.green.shade600,
+                backgroundColor: successColor,
                 behavior: SnackBarBehavior.floating,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -475,14 +472,14 @@ class AddProductPage extends StatelessWidget {
           }
         },
         child: Scaffold(
-          backgroundColor: Colors.grey.shade100,
+          backgroundColor: backgroundColor,
           appBar: AppBar(
             backgroundColor: whiteColor,
             elevation: 0,
 
             centerTitle: true,
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black87),
+              icon: const Icon(Icons.arrow_back_ios_new, color: textPrimary),
               onPressed: () => Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (_) => ProductListPage()),

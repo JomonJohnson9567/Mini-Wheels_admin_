@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:mini_wheelz/core/colors.dart';
 
 class ShimmerPlaceholder extends StatelessWidget {
   const ShimmerPlaceholder({super.key});
@@ -13,12 +14,12 @@ class ShimmerPlaceholder extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
           child: Shimmer.fromColors(
-            baseColor: Colors.grey.shade300,
-            highlightColor: Colors.grey.shade100,
+            baseColor: shimmerBase,
+            highlightColor: shimmerHighlight,
             child: Container(
               height: 80,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: whiteColor,
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
