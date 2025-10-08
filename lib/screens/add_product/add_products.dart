@@ -46,7 +46,7 @@ class AddProductPage extends StatelessWidget {
               ),
             ],
           ),
-          backgroundColor: Colors.orange.shade700,
+          backgroundColor: primaryColor,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
