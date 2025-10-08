@@ -2,7 +2,6 @@ import 'dart:typed_data';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductFormState {
-  
   final String? selectedCategory;
   final String? selectedUnit;
   final List<Uint8List> imageBytes;
@@ -57,6 +56,20 @@ class ProductFormCubit extends Cubit<ProductFormState> {
 
   void setImageBytes(List<Uint8List> imageBytes, List<String> imageNames) {
     emit(state.copyWith(imageBytes: imageBytes, imageNames: imageNames));
+  }
+
+  void removeImage(int index) {
+    if (index >= 0 && index < state.imageBytes.length) {
+      final newImageBytes = List<Uint8List>.from(state.imageBytes);
+      final newImageNames = List<String>.from(state.imageNames);
+
+      newImageBytes.removeAt(index);
+      newImageNames.removeAt(index);
+
+      emit(
+        state.copyWith(imageBytes: newImageBytes, imageNames: newImageNames),
+      );
+    }
   }
 
   void resetForm() {

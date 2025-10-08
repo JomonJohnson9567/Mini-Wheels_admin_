@@ -171,26 +171,59 @@ class AddProductPage extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemCount: formState.imageBytes.length,
                       separatorBuilder: (_, __) => const SizedBox(width: 12),
-                      itemBuilder: (_, i) => Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: blackColor.withOpacity(0.1),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
+                      itemBuilder: (_, i) => Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: blackColor.withOpacity(0.1),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.memory(
-                            formState.imageBytes[i],
-                            width: 120,
-                            height: 120,
-                            fit: BoxFit.cover,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.memory(
+                                formState.imageBytes[i],
+                                width: 120,
+                                height: 120,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
-                        ),
+                          // Delete button
+                          Positioned(
+                            top: 4,
+                            right: 4,
+                            child: GestureDetector(
+                              onTap: () {
+                                context.read<ProductFormCubit>().removeImage(i);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: errorColor.withOpacity(0.8),
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: blackColor.withOpacity(0.2),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: const Icon(
+                                  Icons.close,
+                                  color: whiteColor,
+                                  size: 16,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
