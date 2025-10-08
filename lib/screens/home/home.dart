@@ -13,6 +13,7 @@ class UsersListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final usersRef = FirebaseFirestore.instance.collection('users');
+    // ignore: no_leading_underscores_for_local_identifiers
     final TextEditingController _searchController = TextEditingController();
 
     Widget buildPage({

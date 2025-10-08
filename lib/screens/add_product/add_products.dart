@@ -7,6 +7,9 @@ import 'package:mini_wheelz/bloc/product_event.dart';
 import 'package:mini_wheelz/bloc/product_form/product_form_cubit.dart';
 import 'package:mini_wheelz/bloc/product_state.dart';
 import 'package:mini_wheelz/core/colors.dart';
+import 'package:mini_wheelz/screens/add_product/widget/decoration.dart';
+import 'package:mini_wheelz/screens/add_product/widget/product_adding_gif.dart';
+import 'package:mini_wheelz/screens/product_list/product_list.dart';
 import 'package:mini_wheelz/widgets/responsive.dart';
 
 class AddProductPage extends StatelessWidget {
@@ -89,35 +92,6 @@ class AddProductPage extends StatelessWidget {
     );
   }
 
-  InputDecoration _decoration(String label, IconData icon) => InputDecoration(
-    labelText: label,
-    prefixIcon: Icon(icon, color: primaryColor, size: 22),
-    filled: true,
-    fillColor: Colors.grey.shade50,
-    contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(16),
-      borderSide: BorderSide.none,
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.grey.shade200, width: 1.5),
-      borderRadius: BorderRadius.circular(16),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderSide: const BorderSide(color: primaryColor, width: 2),
-      borderRadius: BorderRadius.circular(16),
-    ),
-    errorBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.red.shade300, width: 1.5),
-      borderRadius: BorderRadius.circular(16),
-    ),
-    focusedErrorBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.red.shade400, width: 2),
-      borderRadius: BorderRadius.circular(16),
-    ),
-    labelStyle: TextStyle(color: Colors.grey.shade600, fontSize: 15),
-  );
-
   Widget buildSectionTitle(String title, IconData icon) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16, top: 8),
@@ -151,14 +125,114 @@ class AddProductPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          buildSectionTitle('Basic Information', Icons.info_outline),
+          buildSectionTitle('Product Images', Icons.photo_library_outlined),
+
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: formState.imageBytes.isEmpty
+                    ? Colors.grey.shade300
+                    : primaryColor.withOpacity(0.3),
+                width: 2,
+                style: BorderStyle.solid,
+              ),
+            ),
+            child: Column(
+              children: [
+                if (formState.imageBytes.isEmpty) ...[
+                  Icon(
+                    Icons.add_photo_alternate_outlined,
+                    size: 48,
+                    color: Colors.grey.shade400,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    "No images selected",
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Add product images to showcase your item",
+                    style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
+                    textAlign: TextAlign.center,
+                  ),
+                ] else ...[
+                  SizedBox(
+                    height: 120,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: formState.imageBytes.length,
+                      separatorBuilder: (_, __) => const SizedBox(width: 12),
+                      itemBuilder: (_, i) => Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.memory(
+                            formState.imageBytes[i],
+                            width: 120,
+                            height: 120,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    "${formState.imageBytes.length} image${formState.imageBytes.length > 1 ? 's' : ''} selected",
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 16),
+                OutlinedButton.icon(
+                  onPressed: () => _pickMultipleImages(context),
+                  icon: const Icon(Icons.add_a_photo_outlined),
+                  label: Text(
+                    formState.imageBytes.isEmpty
+                        ? "Select Images"
+                        : "Add More Images",
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: primaryColor,
+                    side: const BorderSide(color: primaryColor, width: 1.5),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 14,
+                      horizontal: 24,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 32),
 
           TextFormField(
             controller: nameController,
-            decoration: _decoration(
-              'Product Name',
-              Icons.shopping_bag_outlined,
-            ),
+            decoration: decoration('Product Name', Icons.shopping_bag_outlined),
             style: const TextStyle(fontSize: 15),
             validator: (v) => v!.isEmpty ? 'Enter product name' : null,
           ),
@@ -166,7 +240,7 @@ class AddProductPage extends StatelessWidget {
 
           TextFormField(
             controller: descriptionController,
-            decoration: _decoration('Description', Icons.description_outlined),
+            decoration: decoration('Description', Icons.description_outlined),
             style: const TextStyle(fontSize: 15),
             maxLines: 4,
           ),
@@ -180,7 +254,7 @@ class AddProductPage extends StatelessWidget {
                 child: TextFormField(
                   controller: priceController,
                   keyboardType: TextInputType.number,
-                  decoration: _decoration('Price', Icons.currency_rupee),
+                  decoration: decoration('Price', Icons.currency_rupee),
                   style: const TextStyle(fontSize: 15),
                   validator: (v) => v!.isEmpty ? 'Enter price' : null,
                 ),
@@ -190,7 +264,7 @@ class AddProductPage extends StatelessWidget {
                 child: TextFormField(
                   controller: quantityController,
                   keyboardType: TextInputType.number,
-                  decoration: _decoration('Quantity', Icons.inventory_outlined),
+                  decoration: decoration('Quantity', Icons.inventory_outlined),
                   style: const TextStyle(fontSize: 15),
                   validator: (v) => v!.isEmpty ? 'Enter quantity' : null,
                 ),
@@ -324,111 +398,6 @@ class AddProductPage extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
-          buildSectionTitle('Product Images', Icons.photo_library_outlined),
-
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade50,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: formState.imageBytes.isEmpty
-                    ? Colors.grey.shade300
-                    : primaryColor.withOpacity(0.3),
-                width: 2,
-                style: BorderStyle.solid,
-              ),
-            ),
-            child: Column(
-              children: [
-                if (formState.imageBytes.isEmpty) ...[
-                  Icon(
-                    Icons.add_photo_alternate_outlined,
-                    size: 48,
-                    color: Colors.grey.shade400,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    "No images selected",
-                    style: TextStyle(
-                      color: Colors.grey.shade600,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Add product images to showcase your item",
-                    style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
-                    textAlign: TextAlign.center,
-                  ),
-                ] else ...[
-                  SizedBox(
-                    height: 120,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: formState.imageBytes.length,
-                      separatorBuilder: (_, __) => const SizedBox(width: 12),
-                      itemBuilder: (_, i) => Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.memory(
-                            formState.imageBytes[i],
-                            width: 120,
-                            height: 120,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    "${formState.imageBytes.length} image${formState.imageBytes.length > 1 ? 's' : ''} selected",
-                    style: TextStyle(
-                      color: Colors.grey.shade600,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-                const SizedBox(height: 16),
-                OutlinedButton.icon(
-                  onPressed: () => _pickMultipleImages(context),
-                  icon: const Icon(Icons.add_a_photo_outlined),
-                  label: Text(
-                    formState.imageBytes.isEmpty
-                        ? "Select Images"
-                        : "Add More Images",
-                  ),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: primaryColor,
-                    side: const BorderSide(color: primaryColor, width: 1.5),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 14,
-                      horizontal: 24,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 32),
-
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
@@ -510,106 +479,20 @@ class AddProductPage extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: whiteColor,
             elevation: 0,
-            title: const Text(
-              'Add New Product',
-              style: TextStyle(
-                color: Colors.black87,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+
             centerTitle: true,
             leading: IconButton(
               icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black87),
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => ProductListPage()),
+              ),
             ),
           ),
           body: BlocBuilder<AddProductBloc, AddProductState>(
             builder: (context, addState) {
               if (addState is AddProductLoading) {
-                return Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: Colors.white,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 220,
-                        height: 220,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(24),
-                          boxShadow: [
-                            BoxShadow(
-                              color: primaryColor.withOpacity(0.1),
-                              spreadRadius: 4,
-                              blurRadius: 20,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(24),
-                          child: Image.asset(
-                            'lib/assets/image/car-7004_256.gif',
-                            width: 220,
-                            height: 220,
-                            fit: BoxFit.contain,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                width: 220,
-                                height: 220,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade50,
-                                  borderRadius: BorderRadius.circular(24),
-                                ),
-                                child: const Center(
-                                  child: CircularProgressIndicator(
-                                    color: primaryColor,
-                                    strokeWidth: 3,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 32),
-                      Text(
-                        'Adding Product...',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey.shade800,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        'Please wait while we save your product',
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.grey.shade500,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 40),
-                      Container(
-                        width: 240,
-                        height: 4,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(2),
-                          child: LinearProgressIndicator(
-                            backgroundColor: Colors.grey.shade200,
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                              primaryColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
+                return product_adding_gif();
               }
 
               return BlocBuilder<ProductFormCubit, ProductFormState>(
