@@ -7,6 +7,7 @@ import 'package:mini_wheelz/bloc/admin_orders_filter_bloc.dart';
 import 'package:mini_wheelz/bloc/category_bloc.dart';
 import 'package:mini_wheelz/bloc/product_bloc.dart';
 import 'package:mini_wheelz/screens/auth/authwraper_page.dart';
+import 'package:mini_wheelz/screens/earnings/earnings_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -96,7 +97,9 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: const AuthWrapper(),
+        // Switch to `EarningsScreen` to preview the new UI quickly.
+        // Replace with `AuthWrapper()` to restore default behavior.
+        home: const EarningsScreen(),
       ),
     );
   }
