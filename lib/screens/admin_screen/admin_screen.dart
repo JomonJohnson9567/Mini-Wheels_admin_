@@ -78,6 +78,8 @@ class AdminDashboard extends StatelessWidget {
                 ? const ShimmerPlaceholder()
                 : _screens[selectedIndex],
             bottomNavigationBar: BottomNavigationBar(
+              
+
               type: BottomNavigationBarType.fixed,
               backgroundColor: whiteColor,
               selectedItemColor: primaryColor,
@@ -88,8 +90,8 @@ class AdminDashboard extends StatelessWidget {
               },
               items: const [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: 'Users',
+                  icon: Icon(Icons.currency_rupee_rounded),
+                  label: 'Revenue',
                 ),
                 BottomNavigationBarItem(
                   // 👈 NEW

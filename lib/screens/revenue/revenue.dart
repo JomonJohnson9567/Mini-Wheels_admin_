@@ -7,11 +7,9 @@ import 'package:mini_wheelz/bloc/revenue_event.dart';
 import 'package:mini_wheelz/bloc/revenue_state.dart';
 import 'package:mini_wheelz/bloc/revenue_repository.dart';
 import 'package:mini_wheelz/core/colors.dart';
-import 'package:mini_wheelz/screens/revenue/widget/chart_selection.dart';
-import 'package:mini_wheelz/screens/revenue/widget/format_currency.dart';
+
 import 'package:mini_wheelz/screens/revenue/widget/layouts.dart';
 import 'package:mini_wheelz/widgets/responsive.dart';
-import 'package:shimmer/shimmer.dart';
 
 import 'package:intl/intl.dart';
 
@@ -25,15 +23,7 @@ class EarningsScreen extends StatelessWidget {
           RevenueBloc(RevenueRepository())..add(LoadRevenueEvent()),
       child: Scaffold(
         backgroundColor: backgroundColor,
-        appBar: AppBar(
-          title: const Text(
-            'Revenue Dashboard',
-            style: TextStyle(fontWeight: FontWeight.bold, color: textPrimary),
-          ),
-          backgroundColor: whiteColor,
-          elevation: 0,
-          iconTheme: const IconThemeData(color: textPrimary),
-        ),
+
         body: ResponsiveLayout(
           mobile: (_) => buildMobileLayout(context),
           tablet: (_) => buildTabletLayout(context),
