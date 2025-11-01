@@ -8,3 +8,9 @@ class CategoryLoadedState extends CategoryState {
   final List<DocumentSnapshot> categories;
   CategoryLoadedState(this.categories);
 }
+
+class CategoryErrorState extends CategoryState {
+  final String message;
+  final List<DocumentSnapshot> categories;
+  CategoryErrorState(this.message, this.categories);
+}

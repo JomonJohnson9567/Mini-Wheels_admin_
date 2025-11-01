@@ -5,7 +5,6 @@ import 'package:mini_wheelz/bloc/user_search_cubit.dart';
 import 'package:mini_wheelz/core/colors.dart';
 import 'package:mini_wheelz/widgets/responsive.dart';
 import 'package:mini_wheelz/widgets/shimmer.dart';
- 
 
 class UsersListPage extends StatelessWidget {
   const UsersListPage({super.key});
@@ -41,10 +40,9 @@ class UsersListPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      onChanged:
-                          (value) => context
-                              .read<UserSearchCubit>()
-                              .updateSearchQuery(value),
+                      onChanged: (value) => context
+                          .read<UserSearchCubit>()
+                          .updateSearchQuery(value),
                     );
                   },
                 ),
@@ -53,10 +51,9 @@ class UsersListPage extends StatelessWidget {
                 child: BlocBuilder<UserSearchCubit, String>(
                   builder: (context, searchQuery) {
                     return StreamBuilder<QuerySnapshot>(
-                      stream:
-                          usersRef
-                              .orderBy('timestamp', descending: true)
-                              .snapshots(),
+                      stream: usersRef
+                          .orderBy('timestamp', descending: true)
+                          .snapshots(),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
                           return Center(
@@ -73,14 +70,13 @@ class UsersListPage extends StatelessWidget {
                         }
 
                         final docs = snapshot.data?.docs ?? [];
-                        final filteredDocs =
-                            docs.where((doc) {
-                              final data = doc.data() as Map<String, dynamic>;
-                              final name = (data['name'] ?? '').toLowerCase();
-                              final email = (data['email'] ?? '').toLowerCase();
-                              return name.contains(searchQuery.toLowerCase()) ||
-                                  email.contains(searchQuery.toLowerCase());
-                            }).toList();
+                        final filteredDocs = docs.where((doc) {
+                          final data = doc.data() as Map<String, dynamic>;
+                          final name = (data['name'] ?? '').toLowerCase();
+                          final email = (data['email'] ?? '').toLowerCase();
+                          return name.contains(searchQuery.toLowerCase()) ||
+                              email.contains(searchQuery.toLowerCase());
+                        }).toList();
 
                         if (filteredDocs.isEmpty) {
                           return Center(
@@ -94,8 +90,8 @@ class UsersListPage extends StatelessWidget {
                         return ListView.separated(
                           padding: pagePadding,
                           itemCount: filteredDocs.length,
-                          separatorBuilder:
-                              (_, __) => const SizedBox(height: 12),
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(height: 12),
                           itemBuilder: (context, index) {
                             final data =
                                 filteredDocs[index].data()
@@ -179,25 +175,28 @@ class UsersListPage extends StatelessWidget {
       create: (_) => UserSearchCubit(),
       child: Scaffold(
         backgroundColor: whiteColor,
+        appBar: AppBar(
+          title: const Text('Users'),
+          backgroundColor: primaryColor,
+          foregroundColor: whiteColor,
+          elevation: 0,
+        ),
         body: ResponsiveLayout(
-          mobile:
-              (_) => buildPage(
-                maxWidth: double.infinity,
-                pagePadding: const EdgeInsets.all(12),
-                titleFontSize: 18,
-              ),
-          tablet:
-              (_) => buildPage(
-                maxWidth: 700,
-                pagePadding: const EdgeInsets.all(20),
-                titleFontSize: 20,
-              ),
-          desktop:
-              (_) => buildPage(
-                maxWidth: 900,
-                pagePadding: const EdgeInsets.all(32),
-                titleFontSize: 22,
-              ),
+          mobile: (_) => buildPage(
+            maxWidth: double.infinity,
+            pagePadding: const EdgeInsets.all(12),
+            titleFontSize: 18,
+          ),
+          tablet: (_) => buildPage(
+            maxWidth: 700,
+            pagePadding: const EdgeInsets.all(20),
+            titleFontSize: 20,
+          ),
+          desktop: (_) => buildPage(
+            maxWidth: 900,
+            pagePadding: const EdgeInsets.all(32),
+            titleFontSize: 22,
+          ),
         ),
       ),
     );

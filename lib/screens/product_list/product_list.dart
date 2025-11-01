@@ -259,7 +259,7 @@ class ProductListPage extends StatelessWidget {
                 ),
               ),
 
-              // 🗑 Delete button
+              //  Delete button
               IconButton(
                 icon: const Icon(Icons.delete, color: errorColor),
                 onPressed: () => _deleteProduct(context, doc.id),

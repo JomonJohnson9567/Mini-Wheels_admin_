@@ -9,14 +9,15 @@ import 'package:mini_wheelz/screens/add_product/add_products.dart';
 import 'package:mini_wheelz/screens/home/home.dart';
 import 'package:mini_wheelz/screens/order_screen/orders_screen.dart';
 import 'package:mini_wheelz/screens/product_list/product_list.dart';
+import 'package:mini_wheelz/screens/revenue/revenue.dart';
 import 'package:mini_wheelz/widgets/shimmer.dart';
- 
 
 class AdminDashboard extends StatelessWidget {
   AdminDashboard({super.key});
 
   final List<Widget> _screens = [
-    UsersListPage(),
+    EarningsScreen(),
+
     BlocProvider(
       create: (_) => AdminOrdersBloc(),
       child: const AdminOrdersScreen(),
@@ -28,7 +29,7 @@ class AdminDashboard extends StatelessWidget {
 
   // Update the _titles list
   final List<String> _titles = [
-    'All Users',
+    'Revenue Dashboard',
     'Orders Management', // 👈 NEW
     'Add Category',
     'Add Product',
@@ -55,6 +56,17 @@ class AdminDashboard extends StatelessWidget {
               elevation: 0,
               actions: [
                 IconButton(
+                  icon: const Icon(Icons.person_4_outlined),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (c) => UsersListPage()),
+                    );
+                  },
+                  tooltip: 'Revenue',
+                  color: whiteColor,
+                ),
+                IconButton(
                   icon: const Icon(Icons.logout),
                   onPressed: _signOut,
                   tooltip: 'Sign Out',
@@ -62,10 +74,9 @@ class AdminDashboard extends StatelessWidget {
                 ),
               ],
             ),
-            body:
-                state.isLoading
-                    ? const ShimmerPlaceholder()
-                    : _screens[selectedIndex],
+            body: state.isLoading
+                ? const ShimmerPlaceholder()
+                : _screens[selectedIndex],
             bottomNavigationBar: BottomNavigationBar(
               type: BottomNavigationBarType.fixed,
               backgroundColor: whiteColor,

@@ -33,18 +33,50 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     Emitter<CategoryState> emit,
   ) async {
     try {
+      // Check for duplicate category (case-insensitive)
+      final categoryName = event.name.trim().toLowerCase();
+      final isDuplicate = _allCategories.any((doc) {
+        final existingName = (doc['name'] as String).toLowerCase().trim();
+        return existingName == categoryName;
+      });
+
+      if (isDuplicate) {
+        // Get current categories from the last loaded state
+        final currentCategories = _allCategories;
+        emit(
+          CategoryErrorState(
+            'Category "${event.name}" already exists!',
+            currentCategories,
+          ),
+        );
+        // Emit back to loaded state after showing error
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (!isClosed) {
+            emit(CategoryLoadedState(currentCategories));
+          }
+        });
+        return;
+      }
+
+      // If not duplicate, add to Firestore
       await FirebaseFirestore.instance.collection('categories').add({
-        'name': event.name,
+        'name': event.name.trim(),
       });
       add(LoadCategoriesEvent());
     } catch (error) {
-      // Keep current state but log for visibility during development
-      // You can emit a dedicated failure state if you want to show UI feedback
-      // e.g., emit(CategoryErrorState(error.toString()));
-      // For now, just print so the developer sees the issue in the console
-      // and the UI remains stable.
-      // ignore: avoid_print
-      print('Failed to add category: $error');
+      // Handle Firestore errors
+      final currentCategories = _allCategories;
+      emit(
+        CategoryErrorState(
+          'Failed to add category: ${error.toString()}',
+          currentCategories,
+        ),
+      );
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (!isClosed) {
+          emit(CategoryLoadedState(currentCategories));
+        }
+      });
     }
   }
 
