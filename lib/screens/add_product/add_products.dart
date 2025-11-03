@@ -11,7 +11,7 @@ import 'package:mini_wheelz/bloc/product_state.dart';
 import 'package:mini_wheelz/core/colors.dart';
 import 'package:mini_wheelz/screens/add_product/widget/decoration.dart';
 import 'package:mini_wheelz/screens/add_product/widget/product_adding_gif.dart';
-import 'package:mini_wheelz/screens/product_list/product_list.dart';
+
 import 'package:mini_wheelz/widgets/responsive.dart';
 
 class AddProductPage extends StatelessWidget {
@@ -508,19 +508,7 @@ class AddProductPage extends StatelessWidget {
         },
         child: Scaffold(
           backgroundColor: backgroundColor,
-          appBar: AppBar(
-            backgroundColor: whiteColor,
-            elevation: 0,
 
-            centerTitle: true,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new, color: textPrimary),
-              onPressed: () => Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => ProductListPage()),
-              ),
-            ),
-          ),
           body: BlocBuilder<AddProductBloc, AddProductState>(
             builder: (context, addState) {
               if (addState is AddProductLoading) {
