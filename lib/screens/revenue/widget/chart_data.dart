@@ -66,7 +66,8 @@ BarChartData buildChartData(List<ChartDataPoint> chartData) {
               return Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
-                  DateFormat('MMM dd').format(chartData[value.toInt()].date),
+
+                  DateFormat('dd-MM').format(chartData[value.toInt()].date),
                   style: const TextStyle(
                     color: textSecondary,
                     fontSize: 10,

@@ -27,10 +27,9 @@ class AdminDashboard extends StatelessWidget {
     ProductListPage(),
   ];
 
-  // Update the _titles list
   final List<String> _titles = [
     'Revenue Dashboard',
-    'Orders Management', // 👈 NEW
+    'Orders Management', 
     'Add Category',
     'Add Product',
     'My Products',
@@ -78,10 +77,11 @@ class AdminDashboard extends StatelessWidget {
                 ? const ShimmerPlaceholder()
                 : _screens[selectedIndex],
             bottomNavigationBar: BottomNavigationBar(
-              
+
 
               type: BottomNavigationBarType.fixed,
               backgroundColor: whiteColor,
+
               selectedItemColor: primaryColor,
               unselectedItemColor: greyColor,
               currentIndex: selectedIndex,
@@ -94,7 +94,7 @@ class AdminDashboard extends StatelessWidget {
                   label: 'Revenue',
                 ),
                 BottomNavigationBarItem(
-                  // 👈 NEW
+                   
                   icon: Icon(Icons.shopping_bag),
                   label: 'Orders',
                 ),

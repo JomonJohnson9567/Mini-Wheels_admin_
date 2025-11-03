@@ -7,6 +7,7 @@ import 'package:mini_wheelz/bloc/admin_orders_filter_bloc.dart';
 import 'package:mini_wheelz/bloc/category_bloc.dart';
 import 'package:mini_wheelz/bloc/product_bloc.dart';
 import 'package:mini_wheelz/screens/auth/authwraper_page.dart';
+import 'package:mini_wheelz/screens/splash/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -96,7 +97,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        home: const AuthWrapper(),
+        home: const SplashScreen(),
       ),
     );
   }

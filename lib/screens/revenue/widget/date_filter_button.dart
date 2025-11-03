@@ -59,7 +59,7 @@ Widget buildDateFilterButton(BuildContext context) {
                       const SizedBox(height: 4),
                       Text(
                         startDate != null && endDate != null
-                            ? '${DateFormat('MMM dd, yyyy').format(startDate)} - ${DateFormat('MMM dd, yyyy').format(endDate)}'
+                            ? '${DateFormat('dd-MM-yyyy').format(startDate)} - ${DateFormat('dd-MM-yyyy').format(endDate)}'
                             : 'All Time',
                         style: const TextStyle(
                           fontSize: 14,

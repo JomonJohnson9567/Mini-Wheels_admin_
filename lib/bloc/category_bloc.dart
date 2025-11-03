@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mini_wheelz/core/utils/cloudinary_service.dart';
 import 'category_event.dart';
 import 'category_state.dart';
 
@@ -19,13 +20,22 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     Emitter<CategoryState> emit,
   ) async {
     emit(CategoryLoadingState());
-    final snapshot = await FirebaseFirestore.instance
-        .collection('categories')
-        .orderBy('name')
-        .get();
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('categories')
+          .orderBy('name')
+          .get();
 
-    _allCategories = snapshot.docs;
-    emit(CategoryLoadedState(_allCategories));
+      _allCategories = snapshot.docs;
+      emit(CategoryLoadedState(_allCategories));
+    } catch (error) {
+      emit(
+        CategoryErrorState(
+          'Failed to load categories: ${error.toString()}',
+          _allCategories,
+        ),
+      );
+    }
   }
 
   Future<void> _onAddCategory(
@@ -41,42 +51,57 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       });
 
       if (isDuplicate) {
-        // Get current categories from the last loaded state
-        final currentCategories = _allCategories;
         emit(
           CategoryErrorState(
             'Category "${event.name}" already exists!',
-            currentCategories,
+            _allCategories,
           ),
         );
-        // Emit back to loaded state after showing error
-        Future.delayed(const Duration(milliseconds: 100), () {
-          if (!isClosed) {
-            emit(CategoryLoadedState(currentCategories));
-          }
-        });
         return;
       }
 
-      // If not duplicate, add to Firestore
-      await FirebaseFirestore.instance.collection('categories').add({
+      // Upload image to Cloudinary if provided
+      String? imageUrl;
+      if (event.imageBytes != null && event.imageName != null) {
+        try {
+          imageUrl = await CloudinaryService.uploadImage(
+            event.imageBytes!,
+            event.imageName!,
+          );
+        } catch (error) {
+          emit(
+            CategoryErrorState(
+              'Failed to upload image: ${error.toString()}',
+              _allCategories,
+            ),
+          );
+          return;
+        }
+      }
+
+      // Add to Firestore
+      final categoryData = <String, dynamic>{
         'name': event.name.trim(),
-      });
+        'createdAt': FieldValue.serverTimestamp(),
+      };
+
+      if (imageUrl != null) {
+        categoryData['imageUrl'] = imageUrl;
+      }
+
+      await FirebaseFirestore.instance
+          .collection('categories')
+          .add(categoryData);
+
+      // Reload categories
       add(LoadCategoriesEvent());
     } catch (error) {
-      // Handle Firestore errors
-      final currentCategories = _allCategories;
       emit(
         CategoryErrorState(
           'Failed to add category: ${error.toString()}',
-          currentCategories,
+          _allCategories,
         ),
       );
-      Future.delayed(const Duration(milliseconds: 100), () {
-        if (!isClosed) {
-          emit(CategoryLoadedState(currentCategories));
-        }
-      });
     }
   }
 
@@ -84,31 +109,81 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     EditCategoryEvent event,
     Emitter<CategoryState> emit,
   ) async {
-    await FirebaseFirestore.instance
-        .collection('categories')
-        .doc(event.id)
-        .update({'name': event.newName});
-    add(LoadCategoriesEvent());
+    try {
+      final updateData = <String, dynamic>{
+        'name': event.newName.trim(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      };
+
+      // Upload new image if provided
+      if (event.imageBytes != null && event.imageName != null) {
+        try {
+          final imageUrl = await CloudinaryService.uploadImage(
+            event.imageBytes!,
+            event.imageName!,
+          );
+          updateData['imageUrl'] = imageUrl;
+        } catch (error) {
+          emit(
+            CategoryErrorState(
+              'Failed to upload image: ${error.toString()}',
+              _allCategories,
+            ),
+          );
+          return;
+        }
+      }
+
+      await FirebaseFirestore.instance
+          .collection('categories')
+          .doc(event.id)
+          .update(updateData);
+
+      // Reload categories
+      add(LoadCategoriesEvent());
+    } catch (error) {
+      emit(
+        CategoryErrorState(
+          'Failed to update category: ${error.toString()}',
+          _allCategories,
+        ),
+      );
+    }
   }
 
   Future<void> _onDeleteCategory(
     DeleteCategoryEvent event,
     Emitter<CategoryState> emit,
   ) async {
-    await FirebaseFirestore.instance
-        .collection('categories')
-        .doc(event.id)
-        .delete();
-    add(LoadCategoriesEvent());
+    try {
+      await FirebaseFirestore.instance
+          .collection('categories')
+          .doc(event.id)
+          .delete();
+      add(LoadCategoriesEvent());
+    } catch (error) {
+      emit(
+        CategoryErrorState(
+          'Failed to delete category: ${error.toString()}',
+          _allCategories,
+        ),
+      );
+    }
   }
 
   void _onSearchCategory(
     SearchCategoryEvent event,
     Emitter<CategoryState> emit,
   ) {
+    final query = event.query.toLowerCase();
+    if (query.isEmpty) {
+      emit(CategoryLoadedState(_allCategories));
+      return;
+    }
+
     final filtered = _allCategories.where((doc) {
       final name = (doc['name'] as String).toLowerCase();
-      return name.contains(event.query.toLowerCase());
+      return name.contains(query);
     }).toList();
 
     emit(CategoryLoadedState(filtered));
