@@ -23,7 +23,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.jomon.mini_wheelz"
+        applicationId = "com.example.mini_wheelz"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

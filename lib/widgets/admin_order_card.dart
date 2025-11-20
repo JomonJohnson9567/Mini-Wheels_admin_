@@ -6,6 +6,7 @@ import 'package:mini_wheelz/bloc/admin_orders_bloc.dart';
 import 'package:mini_wheelz/core/colors.dart';
 import 'package:mini_wheelz/core/utils/order_status_helper.dart';
 import 'package:mini_wheelz/widgets/order_status_update_dialog.dart';
+import 'package:intl/intl.dart';
 
 class AdminOrderCard extends StatelessWidget {
   final Map<String, dynamic> order;
@@ -194,16 +195,22 @@ class AdminOrderCard extends StatelessWidget {
             color: successColor,
           ),
         ),
-      ],
-    );
+          ],
+        );
   }
 
   Widget _buildOrderFooter(BuildContext context) {
+    final Timestamp? ts = order['createdAt'] as Timestamp?;
+    final DateTime? date = ts?.toDate();
+    final String placed = date != null
+        ? DateFormat('dd MMM yyyy').format(date) // e.g. 05 Sep 2025
+        : 'Unknown';
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          'Placed: ${OrderStatusHelper.formatDate(order['createdAt'] as Timestamp?)}',
+          'Placed: $placed',
           style: const TextStyle(fontSize: 12, color: textSecondary),
         ),
         ElevatedButton(

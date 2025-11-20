@@ -216,3 +216,95 @@ class ProductDetailPage extends StatelessWidget {
     );
   }
 }
+
+class ImageCarousel extends StatefulWidget {
+  final List<String> images;
+  final double height;
+
+  const ImageCarousel({super.key, required this.images, this.height = 300});
+
+  @override
+  State<ImageCarousel> createState() => _ImageCarouselState();
+}
+
+class _ImageCarouselState extends State<ImageCarousel> {
+  late final PageController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = PageController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: widget.height,
+      width: double.infinity,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          PageView.builder(
+            controller: _controller,
+            itemCount: widget.images.length,
+            onPageChanged: (index) =>
+                context.read<ImageCarouselCubit>().updatePage(index),
+            itemBuilder: (context, index) {
+              final url = widget.images[index];
+              return Container(
+                color: lightGrey,
+                child: Image.network(
+                  url,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: widget.height,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return const Center(child: CircularProgressIndicator());
+                  },
+                  errorBuilder: (context, error, stackTrace) =>
+                      const Center(child: Icon(Icons.broken_image, size: 64)),
+                ),
+              );
+            },
+          ),
+
+          // Dots indicator
+          Positioned(
+            bottom: 12,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: BlocBuilder<ImageCarouselCubit, int>(
+                builder: (context, current) {
+                  return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(widget.images.length, (i) {
+                      final active = i == current;
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        width: active ? 12 : 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: active ? Colors.blue : Colors.blue.shade50,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      );
+                    }),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

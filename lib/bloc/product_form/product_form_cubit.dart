@@ -58,6 +58,14 @@ class ProductFormCubit extends Cubit<ProductFormState> {
     emit(state.copyWith(imageBytes: imageBytes, imageNames: imageNames));
   }
 
+  // NEW METHOD: Appends new images to existing ones instead of replacing
+  void addImageBytes(List<Uint8List> newBytes, List<String> newNames) {
+    emit(state.copyWith(
+      imageBytes: [...state.imageBytes, ...newBytes],
+      imageNames: [...state.imageNames, ...newNames],
+    ));
+  }
+
   void removeImage(int index) {
     if (index >= 0 && index < state.imageBytes.length) {
       final newImageBytes = List<Uint8List>.from(state.imageBytes);

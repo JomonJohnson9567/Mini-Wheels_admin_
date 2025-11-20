@@ -31,7 +31,8 @@ class AddProductPage extends StatelessWidget {
         pickedFiles.map((f) => f.readAsBytes()),
       );
       final imageNames = pickedFiles.map((f) => f.name).toList();
-      context.read<ProductFormCubit>().setImageBytes(imageBytes, imageNames);
+      // Changed to addImageBytes to append instead of replace
+      context.read<ProductFormCubit>().addImageBytes(imageBytes, imageNames);
     }
   }
 
